@@ -8,6 +8,7 @@ import com.kolotree.service.PersonServiceAdapter;
 import com.kolotree.service.ports.PersonService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 @Configuration
 public class SpringConfiguration {
@@ -18,12 +19,13 @@ public class SpringConfiguration {
     }
 
     @Bean
-    public Repository<Person> personRepository() {
-        return new PersonMappingRepository(personConverter());
+    public Repository<Person> personRepository(MongoRepository<com.kolotree.persistence.model.Person, String> mongoRepository) {
+        return new PersonMappingRepository(personConverter(), mongoRepository);
     }
 
     @Bean
-    public PersonService personService() {
-        return new PersonServiceAdapter(personRepository());
+    public PersonService personService(MongoRepository<com.kolotree.persistence.model.Person, String> mongoRepository) {
+        return new PersonServiceAdapter(personRepository(mongoRepository));
     }
+
 }

@@ -6,18 +6,17 @@ import com.kolotree.persistence.converters.ModelConverter;
 import com.kolotree.repository.ports.Repository;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public abstract class MappingRepository<TDomain extends AggregateRoot, TPersistence> implements Repository<TDomain> {
 
-    @Autowired
     private MongoRepository<TPersistence, String> springMongoRepository;
-
     private ModelConverter<TDomain, TPersistence> converter;
 
-    public MappingRepository(ModelConverter<TDomain, TPersistence> converter) {
+    public MappingRepository(ModelConverter<TDomain, TPersistence> converter,
+                             MongoRepository<TPersistence, String> springMongoRepository) {
         this.converter = converter;
+        this.springMongoRepository = springMongoRepository;
     }
 
     @Override
