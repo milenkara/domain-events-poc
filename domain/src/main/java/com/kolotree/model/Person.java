@@ -7,6 +7,8 @@ import io.vavr.control.Option;
 import io.vavr.control.Validation;
 import lombok.Getter;
 
+import java.util.UUID;
+
 @Getter
 public class Person extends AggregateRoot {
 
@@ -45,6 +47,17 @@ public class Person extends AggregateRoot {
                 .ap(Person::new)
                 .toEither()
                 .mapLeft(s -> String.join(", ", s));
+    }
+
+    public static Either<String, Person> personFrom(Name firstName,
+                                                    Option<Name> middleName,
+                                                    Name lastName,
+                                                    Email email,
+                                                    Address address) {
+
+        var id = Id.idFrom(UUID.randomUUID().toString()).get();
+
+        return personFrom(id, firstName, middleName, lastName, email, address);
     }
 
     private static <T> Validation<String, T> validate(T data) {
